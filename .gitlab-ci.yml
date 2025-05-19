@@ -1,0 +1,26 @@
+# Định nghĩa các giai đoạn trong pipeline
+stages:
+  - test  # Giai đoạn kiểm thử
+
+# Job kiểm thử dự án
+test_project:
+  stage: test  # Thuộc giai đoạn test
+  image: python:3.10  # Sử dụng Docker image Python 3.10
+
+  before_script:
+    # Cài đặt các thư viện cần thiết trước khi chạy script chính
+    - pip install -r requirements.txt
+
+  script:
+    # Chạy bộ kiểm thử bằng pytest
+    - pytest
+
+    # Chạy lại pytest nhưng với coverage để đo độ bao phủ mã nguồn
+    - coverage run -m pytest
+
+    # Hiển thị báo cáo độ bao phủ
+    - coverage report
+
+  only:
+    # Chỉ chạy job này khi có commit vào nhánh main
+    - main
